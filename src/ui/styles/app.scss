@@ -1,3 +1,27 @@
-h1 {
-  color: #444;
+body {
+  background-color: #1E293B;
+  font-family: sans-serif;
+  color: #F5835F;
+}
+
+table {
+  border: 1px solid #8C9AB1;
+  tr {
+
+  }
+  td {
+    width: 10px;
+    height: 10px;
+    color: white;
+  }
+}
+
+.snake {
+  background-color: #F5835F;
+  border-color: #F5835F;
+}
+
+.food {
+  background-color: #fff;
+  border-color: #fff;
 }

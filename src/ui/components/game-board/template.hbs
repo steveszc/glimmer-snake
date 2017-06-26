@@ -1,0 +1,10 @@
+<p><strong>score:</strong> {{snake.body.length}} ({{tick}})</p>
+<table>
+  {{#each board.rows key="@index" as |row|}}
+    <tr>
+      {{#each row.cells key="@index" as |cell|}}
+        <td class="{{if cell.hasSnake 'snake'}} {{if cell.hasFood 'food'}}"></td>
+      {{/each}}
+    </tr>
+  {{/each}}
+</table>
