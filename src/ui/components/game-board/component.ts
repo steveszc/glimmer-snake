@@ -93,8 +93,6 @@ export default class GameBoard extends Component {
 
     let head = this.getNextSnakeHead();
 
-    let bodyCollision = this.getCellFromBoard(head).hasSnake;
-
     let boundsCollision = (
       head[0] < 0
       || head[1] < 0
@@ -102,8 +100,8 @@ export default class GameBoard extends Component {
       || head[1] >= SIZE
     );
 
-    // check if hitting the map edge or
-    if (bodyCollision || boundsCollision) {
+    // check if hitting the map edge or hitting the body
+    if (boundsCollision || this.getCellFromBoard(head).hasSnake) {
       this.snake.isMoving = false;
       return this.resetTheGame();
     }
