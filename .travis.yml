@@ -15,6 +15,10 @@ branches:
 
 script: ember build
 
+env:
+  global:
+  - COMMIT_AUTHOR_EMAIL: "steveszc@gmail.com"
+
 deploy:
   on:
     branch: master
