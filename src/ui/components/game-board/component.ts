@@ -1,6 +1,6 @@
 import Component, { tracked } from '@glimmer/component';
 
-const SPEED : number = 100; //
+const SPEED : number = 50; //
 const SIZE : number = 40;
 
 interface Snake {
@@ -21,6 +21,9 @@ export default class GameBoard extends Component {
 
   @tracked
   snake : Snake;
+
+  @tracked
+  score : number = 0;
 
   @tracked
   tick : number = 0;
@@ -111,9 +114,9 @@ export default class GameBoard extends Component {
 
     //check if hitting food
     if (head.toString() === this.board.food.toString()) {
-      this.getCellFromBoard(this.board.food).hasFood = false;
-      this.board.food = (this.board.food.toString() === '20,20') ? [5, 5] : [20, 20];
-      this.getCellFromBoard(this.board.food).hasFood = true;
+      this.eatTheFood();
+
+    // if not eatting food, remove the tail
     } else {
       let tail = this.snake.body.pop();  // remove the old tail
       this.getCellFromBoard(tail).hasSnake = false;
@@ -122,7 +125,24 @@ export default class GameBoard extends Component {
 
     this.tick = this.tick + 1;
 
-    return setTimeout(this.moveTheSnake.bind(this), SPEED);
+    return setTimeout(this.moveTheSnake.bind(this), this.args.speed);
+  }
+
+  eatTheFood() : void {
+    // remove the current piece of food
+    this.getCellFromBoard(this.board.food).hasFood = false;
+
+    // place a new piece of food
+    this.board.food = this.getNewFoodLocation();
+    this.getCellFromBoard(this.board.food).hasFood = true;
+
+    this.score = this.score + 1;
+  }
+
+  getNewFoodLocation() : [number, number] {
+    let row = Math.floor(Math.random() * SIZE);
+    let cell = Math.floor(Math.random() * SIZE);
+    return [row, cell];
   }
 
   getCellFromBoard(coords : [number, number]) {
@@ -150,6 +170,7 @@ export default class GameBoard extends Component {
   resetTheGame() : void {
     this.buildTheGameBoard();
     this.createTheSnake();
+    this.score = 0;
   }
 
   willDestroy() : void {

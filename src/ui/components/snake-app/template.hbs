@@ -1,3 +1,13 @@
 <div>
-  <game-board />
+  <game-board @speed={{currentDifficulty.speed}} />
+
+  <select onchange={{action handleChangeDifficulty}}>
+    {{#each difficulties key="@index" as |level|}}
+      <option value={{level.name}} selected={{is-equal level.name difficulty}}>{{level.name}}</option>
+    {{/each}}
+  </select>
+
+  <div>
+    Move every <strong>{{currentDifficulty.speed}}</strong> ms
+  </div>
 </div>
