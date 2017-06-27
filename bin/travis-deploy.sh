@@ -17,7 +17,7 @@ cd ..
 rm -rf out/**/* || exit 0
 
 # Get the SSH key used to push to GitHub and add it to our keychain
-openssl aes-256-cbc -K $encrypted_5066e7a45474_key -iv $encrypted_5066e7a45474_iv -in config/github-ssh-key.enc -out config/github-ssh-key -d
+openssl aes-256-cbc -K $encrypted_3c1d9a1cfae8_key -iv $encrypted_3c1d9a1cfae8_iv -in config/github-ssh-key.enc -out config/github-ssh-key -d
 chmod 600 config/github-ssh-key
 eval `ssh-agent -s`
 ssh-add config/github-ssh-key
