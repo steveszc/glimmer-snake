@@ -1,0 +1,27 @@
+---
+language: node_js
+
+node_js:
+  - "6.9.1"
+
+cache: yarn
+
+install: yarn --frozen-lockfile
+
+# See http://stackoverflow.com/questions/31882306
+branches:
+  only:
+    - master
+
+script: ember build
+
+deploy:
+  on:
+    branch: master
+    repo: steveszc/glimmer-snake
+  provider: script
+  script: bin/travis-deploy.sh
+  skip_cleanup: true
+
+notifications:
+  email: false
