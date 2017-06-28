@@ -13,7 +13,7 @@ branches:
   only:
     - master
 
-script: ember build
+script: ember build -prod
 
 deploy:
   provider: pages
