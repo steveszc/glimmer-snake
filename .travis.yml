@@ -15,17 +15,13 @@ branches:
 
 script: ember build
 
-env:
-  global:
-  - COMMIT_AUTHOR_EMAIL: "steveszc@gmail.com"
-
 deploy:
+  provider: pages
+  local_dir: dist
+  skip_cleanup: true
+  github_token: $GITHUB_TOKEN # Set in travis-ci.org dashboard
   on:
     branch: master
-    repo: steveszc/glimmer-snake
-  provider: script
-  script: bin/travis-deploy.sh
-  skip_cleanup: true
 
 notifications:
   email: false
