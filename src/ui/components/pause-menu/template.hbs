@@ -1,0 +1,11 @@
+<div>
+  Move every
+  <select onchange={{action handleChangeSpeed}}>
+    {{#each speeds key="@index" as |aSpeed|}}
+      <option value={{aSpeed}} selected={{is-equal aSpeed @speed}}>
+        {{aSpeed}}
+      </option>
+    {{/each}}
+  </select>
+  milliseconds
+</div>

@@ -1,14 +1,5 @@
 import Component, { tracked } from '@glimmer/component';
 
-const SPEED : number = 50; //
-const SIZE : number = 40;
-
-interface Snake {
-  isMoving : boolean;
-  direction : string;
-  body : Array<[number, number]>;
-}
-
 interface Board {
   food : [number, number];
   rows : Array<any>;
@@ -20,7 +11,7 @@ export default class GameBoard extends Component {
   board : Board;
 
   @tracked
-  snake : Snake;
+  snake : Array<[number, number]>;
 
   @tracked
   score : number = 0;
@@ -28,16 +19,23 @@ export default class GameBoard extends Component {
   @tracked
   tick : number = 0;
 
+  @tracked
+  isMovingSnake : boolean = false;
+
   constructor(options) {
     super(options);
     this.resetTheGame();
-    this.beginAcceptingUserInput();
   }
 
-  buildTheGameBoard(size : number = SIZE) : void {
+  didUpdate() {
+    if (this.args.isPaused || this.isMovingSnake) return;
+    else this.moveTheSnake();
+  }
+
+  buildTheGameBoard() : void {
     this.board = {
-      rows : Array.from(new Array(size)).map(() => ({
-        cells: Array.from(new Array(size)).map(() => ({hasSnake: false}))
+      rows : Array.from(new Array(this.args.size)).map(() => ({
+        cells: Array.from(new Array(this.args.size)).map(() => ({hasSnake: false}))
       })),
       food: [20, 20]
     };
@@ -45,71 +43,35 @@ export default class GameBoard extends Component {
     this.getCellFromBoard(this.board.food).hasFood = true;
   }
 
-  createTheSnake(origin : [number, number] = [10,10]) : void {
-    let originCell = this.getCellFromBoard(origin);
-    this.snake = {
-      isMoving: false,
-      direction: null,
-      body: [origin]
-    }
-    originCell.hasSnake = true;
+  createTheSnake(body : Array<[number, number]> = [[10,10]]) : void {
+    let cells = body.map(cell => this.getCellFromBoard(cell));
+    this.snake = body;
+    cells.forEach(cell => cell.hasSnake = true);
     this.tick = 0;
   }
 
-  beginAcceptingUserInput() : void {
-    window.addEventListener('keydown', this.handleKeyDown.bind(this));
-  }
-
-  handleKeyDown(e : any) : void {
-
-    let wasAMovementKey = true;
-    switch(e.key) {
-      case "ArrowDown":
-        if (this.snake.direction !== 'up') this.snake.direction = 'down';
-        break;
-      case "ArrowUp":
-        if (this.snake.direction !== 'down') this.snake.direction = 'up';
-        break;
-      case "ArrowLeft":
-        if (this.snake.direction !== 'right') this.snake.direction = 'left';
-        break;
-      case "ArrowRight":
-        if (this.snake.direction !== 'left') this.snake.direction = 'right';
-        break;
-      case " ":
-        this.snake.isMoving = false;
-        wasAMovementKey = false;
-        break;
-      default:
-        wasAMovementKey = false;
-        break;
-    }
-
-    if (wasAMovementKey && !this.snake.isMoving) {
-      this.snake.isMoving = true;
-      this.moveTheSnake();
-    }
-  }
-
   moveTheSnake() : any {
-    if (!this.snake.isMoving) return;
+    if (this.args.isPaused) return this.isMovingSnake = false;
+
+    this.isMovingSnake = true;
 
     let head = this.getNextSnakeHead();
 
     let boundsCollision = (
       head[0] < 0
       || head[1] < 0
-      || head[0] >= SIZE
-      || head[1] >= SIZE
+      || head[0] >= this.args.size
+      || head[1] >= this.args.size
     );
 
     // check if hitting the map edge or hitting the body
     if (boundsCollision || this.getCellFromBoard(head).hasSnake) {
-      this.snake.isMoving = false;
+      this.args.pauseTheGame();
+      this.isMovingSnake = false;
       return this.resetTheGame();
     }
 
-    this.snake.body.unshift(head); // add the new head
+    this.snake.unshift(head); // add the new head
     this.getCellFromBoard(head).hasSnake = true;
 
     //check if hitting food
@@ -118,10 +80,9 @@ export default class GameBoard extends Component {
 
     // if not eatting food, remove the tail
     } else {
-      let tail = this.snake.body.pop();  // remove the old tail
+      let tail = this.snake.pop();  // remove the old tail
       this.getCellFromBoard(tail).hasSnake = false;
     }
-
 
     this.tick = this.tick + 1;
 
@@ -140,8 +101,8 @@ export default class GameBoard extends Component {
   }
 
   getNewFoodLocation() : [number, number] {
-    let row = Math.floor(Math.random() * SIZE);
-    let cell = Math.floor(Math.random() * SIZE);
+    let row = Math.floor(Math.random() * this.args.size);
+    let cell = Math.floor(Math.random() * this.args.size);
     return [row, cell];
   }
 
@@ -150,15 +111,15 @@ export default class GameBoard extends Component {
   }
 
   getNextSnakeHead() : [number, number] {
-    let [row, cell] = this.snake.body[0];
-    switch(this.snake.direction) {
-      case 'up' :
+    let [row, cell] = this.snake[0];
+    switch(this.args.direction) {
+      case 0 :
         return [row - 1, cell];
-      case 'right' :
+      case 90 :
         return [row, cell + 1];
-      case 'down' :
+      case 180 :
         return [row + 1, cell];
-      case 'left' :
+      case 270 :
         return [row, cell - 1];
     }
   }
@@ -169,12 +130,8 @@ export default class GameBoard extends Component {
 
   resetTheGame() : void {
     this.buildTheGameBoard();
-    this.createTheSnake();
+    this.createTheSnake([[10,10], [10,11], [11,11], [11,12]]);
     this.score = 0;
-  }
-
-  willDestroy() : void {
-    window.removeEventListener('keydown', this.handleKeyDown);
   }
 
 };
