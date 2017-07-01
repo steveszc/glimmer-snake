@@ -37,7 +37,7 @@ export default class GameBoard extends Component {
       rows : Array.from(new Array(this.args.size)).map(() => ({
         cells: Array.from(new Array(this.args.size)).map(() => ({hasSnake: false}))
       })),
-      food: [20, 20]
+      food: this.getNewFoodLocation()
     };
 
     this.getCellFromBoard(this.board.food).hasFood = true;
@@ -74,6 +74,9 @@ export default class GameBoard extends Component {
     this.snake.unshift(head); // add the new head
     this.getCellFromBoard(head).hasSnake = true;
 
+    //set the direction of the new head on the old head for styling
+    this.getCellFromBoard(this.snake[1]).direction = this.args.direction.toString();
+
     //check if hitting food
     if (head.toString() === this.board.food.toString()) {
       this.eatTheFood();
@@ -81,7 +84,9 @@ export default class GameBoard extends Component {
     // if not eatting food, remove the tail
     } else {
       let tail = this.snake.pop();  // remove the old tail
-      this.getCellFromBoard(tail).hasSnake = false;
+      let tailCell = this.getCellFromBoard(tail);
+      tailCell.hasSnake = false;
+      tailCell.direction = null;
     }
 
     this.tick = this.tick + 1;
@@ -130,7 +135,8 @@ export default class GameBoard extends Component {
 
   resetTheGame() : void {
     this.buildTheGameBoard();
-    this.createTheSnake([[10,10], [10,11], [11,11], [11,12]]);
+    this.createTheSnake();
+    //this.createTheSnake([[10,10], [10,11], [11,11], [11,12]]);
     this.score = 0;
   }
 

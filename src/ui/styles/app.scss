@@ -1,3 +1,11 @@
+html {
+  box-sizing: border-box;
+}
+
+*, *::before, *::after {
+  box-sizing: inherit;
+}
+
 body {
   background-color: #1E293B;
   font-family: sans-serif;
@@ -5,43 +13,59 @@ body {
   text-align: center;
 }
 
-table {
+.board {
   border: 2px solid #8C9AB1;
   margin: 0 auto;
-  border-collapse: collapse;
-  tr {
+  display: inline-flex;
+  flex-direction: column;
+}
 
-  }
-  td {
-    width: 10px;
-    height: 10px;
-    color: white;
-    border: 1px solid #1E293B;
-  }
+.row {
+  height: 10px;
+  display: inline-flex;
+  flex-direction: row;
+}
+
+.cell {
+  width: 10px;
+  height: 10px;
+  color: white;
+  border: 1px solid #1E293B;
+  overflow: visible;
+  position: relative;
 }
 
 .snake {
+  width: 8px;
+  height: 8px;
   background-color: #F5835F;
-  border: 1px solid #1E293B;
+  position: absolute;
+  z-index: 1;
 }
 
-.snake--top {
-  border-top: 1px solid #F5835F;
+.snake--0 {
+  height: 10px;
+  bottom: 0;
 }
 
-.snake--right {
-  border-right: 1px solid #F5835F;
+.snake--90 {
+  width: 10px;
+  left: 0;
 }
 
-.snake--bottom {
-  border-bottom: 1px solid #F5835F;
+.snake--180 {
+  height: 10px;
+  top: 0;
 }
 
-.snake--left {
-  border-left: 1px solid #F5835F;
+.snake--270 {
+  width: 10px;
+  right: 0;
 }
 
 .food {
+  width: 8px;
+  height: 8px;
   background-color: #fff;
   border-color: #fff;
 }
