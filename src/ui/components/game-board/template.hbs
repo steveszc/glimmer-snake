@@ -1,13 +1,14 @@
-<div class="board">
+<div class="board {{concat 'board--' @size}}">
   {{#each board.rows key="@index" as |row|}}
     <div class="row">
       {{#each row.cells key="@index" as |cell|}}
         <div class="cell">
           <div
-            class="{{if cell.hasSnake 'snake'}}{{if cell.direction (concat ' snake--' cell.direction) ' '}}{{if cell.hasFood ' food'}}"></div>
+            class="{{if cell.hasSnake 'snake'}}{{if cell.direction (concat ' snake--' cell.direction)}}{{if cell.isHead ' snake--head'}}{{if cell.hasFood ' food'}}"></div>
         </div>
       {{/each}}
     </div>
   {{/each}}
 </div>
-<p><strong>score:</strong> {{score}} ({{tick}})</p>
+<p><strong>score:</strong> {{score}} </p>
+<p><strong>efficiency:</strong> {{divide tick score}}</p>

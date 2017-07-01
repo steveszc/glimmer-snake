@@ -22,28 +22,35 @@ export default class GameBoard extends Component {
   @tracked
   isMovingSnake : boolean = false;
 
+  size = null;
+
   constructor(options) {
     super(options);
+    this.size = this.args.size;
     this.resetTheGame();
   }
 
   didUpdate() {
+    if (this.size !== this.args.size) {
+      this.size = this.args.size;
+      return this.resetTheGame();
+    }
     if (this.args.isPaused || this.isMovingSnake) return;
     else this.moveTheSnake();
   }
 
-  buildTheGameBoard() : void {
+  buildTheGameBoard() {
     this.board = {
       rows : Array.from(new Array(this.args.size)).map(() => ({
         cells: Array.from(new Array(this.args.size)).map(() => ({hasSnake: false}))
       })),
-      food: this.getNewFoodLocation()
+      food: this.getRandomCoords()
     };
 
     this.getCellFromBoard(this.board.food).hasFood = true;
   }
 
-  createTheSnake(body : Array<[number, number]> = [[10,10]]) : void {
+  createTheSnake(body : Array<[number, number]> = [this.getRandomCoords()]) {
     let cells = body.map(cell => this.getCellFromBoard(cell));
     this.snake = body;
     cells.forEach(cell => cell.hasSnake = true);
@@ -72,10 +79,15 @@ export default class GameBoard extends Component {
     }
 
     this.snake.unshift(head); // add the new head
-    this.getCellFromBoard(head).hasSnake = true;
+    let headCell = this.getCellFromBoard(head);
+    headCell.hasSnake = true;
+    headCell.isHead = true;
+    headCell.direction = this.args.direction.toString();
 
-    //set the direction of the new head on the old head for styling
-    this.getCellFromBoard(this.snake[1]).direction = this.args.direction.toString();
+    //set the direction to the new head on the old head for styling
+    let prevHeadCell = this.getCellFromBoard(this.snake[1]);
+    prevHeadCell.direction = this.args.direction.toString();
+    prevHeadCell.isHead = false;
 
     //check if hitting food
     if (head.toString() === this.board.food.toString()) {
@@ -99,13 +111,13 @@ export default class GameBoard extends Component {
     this.getCellFromBoard(this.board.food).hasFood = false;
 
     // place a new piece of food
-    this.board.food = this.getNewFoodLocation();
+    this.board.food = this.getRandomCoords();
     this.getCellFromBoard(this.board.food).hasFood = true;
 
     this.score = this.score + 1;
   }
 
-  getNewFoodLocation() : [number, number] {
+  getRandomCoords() : [number, number] {
     let row = Math.floor(Math.random() * this.args.size);
     let cell = Math.floor(Math.random() * this.args.size);
     return [row, cell];

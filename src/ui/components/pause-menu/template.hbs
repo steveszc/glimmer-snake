@@ -1,11 +1,24 @@
 <div>
-  Move every
-  <select onchange={{action handleChangeSpeed}}>
-    {{#each speeds key="@index" as |aSpeed|}}
-      <option value={{aSpeed}} selected={{is-equal aSpeed @speed}}>
-        {{aSpeed}}
-      </option>
-    {{/each}}
-  </select>
-  milliseconds
+  <div>
+    <strong>moves per second :</strong>
+    <select onchange={{action handleChangeSpeed}}>
+      {{#each speeds key="@index" as |speed|}}
+        <option value={{speed}} selected={{is-equal speed @speed}}>
+          {{divide 1000 speed}}
+        </option>
+      {{/each}}
+    </select>
+
+  </div>
+
+  <div>
+    <strong>game board :</strong>
+    <select onchange={{action handleChangeSize}}>
+      {{#each sizes key="@index" as |size|}}
+        <option value={{size}} selected={{is-equal size @size}}>
+          {{size}} x {{size}}
+        </option>
+      {{/each}}
+    </select>
+  </div>
 </div>
