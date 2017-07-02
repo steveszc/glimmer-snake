@@ -111,7 +111,7 @@ export default class GameBoard extends Component {
     this.getCellFromBoard(this.board.food).hasFood = false;
 
     // place a new piece of food
-    this.board.food = this.getRandomCoords();
+    this.board.food = this.getEmptyCoords();
     this.getCellFromBoard(this.board.food).hasFood = true;
 
     this.score = this.score + 1;
@@ -121,6 +121,13 @@ export default class GameBoard extends Component {
     let row = Math.floor(Math.random() * this.args.size);
     let cell = Math.floor(Math.random() * this.args.size);
     return [row, cell];
+  }
+
+  getEmptyCoords() : [number, number] {
+    let occupiedCoords = this.snake.concat(this.board.food);
+    let randomCoords = this.getRandomCoords();
+    let randomIsOccupied = occupiedCoords.some(coord => this.coordsAreEqual(coord, randomCoords));
+    return !randomIsOccupied ? randomCoords : this.getEmptyCoords();
   }
 
   getCellFromBoard(coords : [number, number]) {
@@ -141,7 +148,7 @@ export default class GameBoard extends Component {
     }
   }
 
-  equalCoords(a : [number, number], b : [number, number]) {
+  coordsAreEqual(a : [number, number], b : [number, number]) : boolean {
     return a.toString() === b.toString();
   }
 
