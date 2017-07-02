@@ -1,29 +1,107 @@
+$size__cell: 1em;
+$size__border: 0.1em;
+$size__snake: $size__cell + ($size__border * 2);
+
+$black: #1E293B;
+$orange: #F5835F;
+$gray: #8C9AB1;
+$white: #FFFFFF;
+
 body {
-  background-color: #1E293B;
+  background-color: $black;
   font-family: sans-serif;
-  color: #F5835F;
+  color: $orange;
   text-align: center;
 }
 
-table {
-  border: 1px solid #8C9AB1;
+.board {
+  border: 2px solid $gray;
   margin: 0 auto;
-  tr {
+  display: inline-flex;
+  flex-direction: column;
+}
 
+.board--10 { font-size: 2em; }
+.board--20 { font-size: 1em; }
+.board--30 { font-size: 0.5em; }
+.board--40 { font-size: 0.125em; }
+.board--50 { font-size: 0.125em; }
+
+.row {
+  height: $size__cell;
+  display: inline-flex;
+  flex-direction: row;
+  border-top: $size__border solid $black;
+
+  &:first-child {
+    border-top: 0;
   }
-  td {
-    width: 10px;
-    height: 10px;
-    color: white;
+}
+
+.cell {
+  width: $size__cell;
+  height: $size__cell;
+  color: $white;
+  border-left: $size__border solid $black;
+  overflow: visible;
+  position: relative;
+
+  &:first-child {
+    border-left: 0;
   }
 }
 
 .snake {
-  background-color: #F5835F;
-  border-color: #F5835F;
+  width: $size__cell;
+  height: $size__cell;
+  background-color: $orange;
+  position: absolute;
+  z-index: 1;
+}
+
+.snake--0 {
+  height: $size__snake;
+  bottom: 0;
+}
+
+.snake--90 {
+  width: $size__snake;
+  left: 0;
+}
+
+.snake--180 {
+  height: $size__snake;
+  top: 0;
+}
+
+.snake--270 {
+  width: $size__snake;
+  right: 0;
+}
+
+.snake--head {
+  // specifity override of directional snakes cells
+  // Head cell shouldn't protrude into empty space
+  width: $size__cell;
+  height: $size__cell;
+
+  // &.snake--0   { border-radius: 100% 100% 0 0; }
+  // &.snake--90  { border-radius: 0 100% 100% 0; }
+  // &.snake--180 { border-radius: 0 0 100% 100%; }
+  // &.snake--270 { border-radius: 100% 0 0 100%; }
 }
 
 .food {
+  width: $size__cell;
+  height: $size__cell;
   background-color: #fff;
   border-color: #fff;
+}
+
+select {
+  background: $black;
+  color: $orange;
+  border: none;
+  font-size: 1em;
+  margin: .25em;
 }

@@ -1,13 +1,24 @@
 <div>
-  <game-board @speed={{currentDifficulty.speed}} />
 
-  <select onchange={{action handleChangeDifficulty}}>
-    {{#each difficulties key="@index" as |level|}}
-      <option value={{level.name}} selected={{is-equal level.name difficulty}}>{{level.name}}</option>
-    {{/each}}
-  </select>
+  <game-board
+    @size={{state.size}}
+    @direction={{state.direction}}
+    @speed={{state.speed}}
+    @isPaused={{state.isPaused}}
+    @pauseTheGame={{action changeIsPaused true}} />
 
-  <div>
-    Move every <strong>{{currentDifficulty.speed}}</strong> ms
-  </div>
+  <user-input
+    @direction={{state.direction}}
+    @changeDirection={{action changeDirection}}
+    @isPaused={{state.isPaused}}
+    @startTheGame={{action changeIsPaused false}}
+    @pauseTheGame={{action changeIsPaused true}} />
+
+  <pause-menu
+    @isPaused={{state.isPaused}}
+    @size={{state.size}}
+    @changeSize={{action changeSize}}
+    @speed={{state.speed}}
+    @changeSpeed={{action changeSpeed}} />
+
 </div>
