@@ -1,9 +1,13 @@
 # snake
 
 This README outlines the details of collaborating on this Glimmer application.
-A short introduction of this app could easily go here.
+This is the classic game of snake, implemented in Glimmerjs.
 
-## Prerequisites
+## Play The Game
+
+https://steveszc.github.io/glimmer-snake/
+
+## Development Prerequisites
 
 You will need the following things properly installed on your computer.
 
