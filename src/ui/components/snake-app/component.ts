@@ -5,9 +5,11 @@ export default class Snake extends Component {
   @tracked state = {
     size: 20,
     speed: 100,
-    direction: null,
+    directionQueue: [],
     isPaused: true
   }
+
+  @tracked tick : number = 0;
 
   changeSize(size : number) {
     this.state = { ...this.state, size };
@@ -17,11 +19,40 @@ export default class Snake extends Component {
     this.state = { ...this.state, speed };
   }
 
-  changeDirection(direction : number) {
-    this.state = { ...this.state, direction };
+  queueDirection(direction : number) {
+    this.state = {
+      ...this.state,
+      directionQueue: this.state.directionQueue.concat(direction)
+    }
+  }
+
+  replaceDirection(direction : number) {
+    this.state = {
+      ...this.state,
+      directionQueue: [direction]
+    }
+  }
+
+  dequeueDirection(direction : number) {
+    this.state = {
+      ...this.state,
+      directionQueue: this.state.directionQueue.slice(1)
+    }
+  }
+
+  dequeueAllDirection() {
+    this.state = { ...this.state, directionQueue: [] };
   }
 
   changeIsPaused(isPaused : boolean) {
     this.state = { ...this.state, isPaused };
+  }
+
+  incrementTick() {
+    this.tick += 1;
+  }
+
+  resetTick() {
+    this.tick = 0;
   }
 }
