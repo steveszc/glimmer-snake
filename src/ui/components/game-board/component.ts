@@ -17,9 +17,6 @@ export default class GameBoard extends Component {
   score : number = 0;
 
   @tracked
-  tick : number = 0;
-
-  @tracked
   isMovingSnake : boolean = false;
 
   size = null;
@@ -54,55 +51,59 @@ export default class GameBoard extends Component {
     let cells = body.map(cell => this.getCellFromBoard(cell));
     this.snake = body;
     cells.forEach(cell => cell.hasSnake = true);
-    this.tick = 0;
+    this.args.resetTick();
   }
 
   moveTheSnake() : any {
+    // early return if game is paused
     if (this.args.isPaused) return this.isMovingSnake = false;
+    else this.isMovingSnake = true;
 
-    this.isMovingSnake = true;
+    // The coords for the new snake head
+    let headCoords : [number, number] = this.getNextSnakeHead();
 
-    let head = this.getNextSnakeHead();
+    // is the snake hitting a piece of food?
+    let foodCollision : boolean = this.coordsAreEqual(headCoords, this.board.food);
 
-    let boundsCollision = (
-      head[0] < 0
-      || head[1] < 0
-      || head[0] >= this.args.size
-      || head[1] >= this.args.size
+    // Is the snake hitting the edge of the board?
+    let boundsCollision : boolean = (
+      headCoords[0] < 0
+      || headCoords[1] < 0
+      || headCoords[0] >= this.args.size
+      || headCoords[1] >= this.args.size
     );
 
-    // check if hitting the map edge or hitting the body
-    if (boundsCollision || this.getCellFromBoard(head).hasSnake) {
-      this.args.pauseTheGame();
-      this.isMovingSnake = false;
+    // is the snake 1 cell, or 2+ cells?
+    let snakeHasLength : boolean = this.snake.length > 1;
+
+    // Snake is 2+ cells :
+    // Handle food/tail moving before the head is added
+    if (snakeHasLength) {
+      if (foodCollision) this.eatTheFood();
+      else this.removeTheSnakeTail();
+    }
+
+    // Second, restart the game if collision
+    // boundsCollision come first and short circuits in case next head is off board
+    if (boundsCollision || this.getCellFromBoard(headCoords).hasSnake) {
       return this.resetTheGame();
     }
 
-    this.snake.unshift(head); // add the new head
-    let headCell = this.getCellFromBoard(head);
-    headCell.hasSnake = true;
-    headCell.isHead = true;
-    headCell.direction = this.args.direction.toString();
+    // Third, add the new head to the snake
+    this.addTheSnakeHead(headCoords);
 
-    //set the direction to the new head on the old head for styling
-    let prevHeadCell = this.getCellFromBoard(this.snake[1]);
-    prevHeadCell.direction = this.args.direction.toString();
-    prevHeadCell.isHead = false;
-
-    //check if hitting food
-    if (head.toString() === this.board.food.toString()) {
-      this.eatTheFood();
-
-    // if not eatting food, remove the tail
-    } else {
-      let tail = this.snake.pop();  // remove the old tail
-      let tailCell = this.getCellFromBoard(tail);
-      tailCell.hasSnake = false;
-      tailCell.direction = null;
+    // Snake is 1 cell :
+    // Handle food/tail moving after the head is added
+    if (!snakeHasLength) {
+      if (foodCollision) this.eatTheFood();
+      else this.removeTheSnakeTail();
     }
 
-    this.tick = this.tick + 1;
+    // If there is a direction queue, dequeue to first direction in the queue
+    if (this.args.directionQueue.length > 1) this.args.dequeueDirection();
 
+    // Lastly, increment the game tick and schedule the next movement
+    this.args.incrementTick();
     return setTimeout(this.moveTheSnake.bind(this), this.args.speed);
   }
 
@@ -110,10 +111,11 @@ export default class GameBoard extends Component {
     // remove the current piece of food
     this.getCellFromBoard(this.board.food).hasFood = false;
 
-    // place a new piece of food
+    // place a new piece of food on the board
     this.board.food = this.getEmptyCoords();
     this.getCellFromBoard(this.board.food).hasFood = true;
 
+    // increment the game score
     this.score = this.score + 1;
   }
 
@@ -136,7 +138,7 @@ export default class GameBoard extends Component {
 
   getNextSnakeHead() : [number, number] {
     let [row, cell] = this.snake[0];
-    switch(this.args.direction) {
+    switch(this.args.directionQueue[0]) {
       case 0 :
         return [row - 1, cell];
       case 90 :
@@ -148,6 +150,30 @@ export default class GameBoard extends Component {
     }
   }
 
+  removeTheSnakeTail() {
+    let tail : [number, number] = this.snake[this.snake.length - 1];
+    this.snake = this.snake.slice(0, -1); // remove the tail
+    let tailCell = this.getCellFromBoard(tail);
+    tailCell.hasSnake = false;
+    tailCell.direction = null;
+  }
+
+  addTheSnakeHead(head : [number, number]) {
+    // add the new head to the snake
+    this.snake = [head].concat(this.snake);
+
+    // update the head cell on the board
+    let headCell = this.getCellFromBoard(head);
+    headCell.hasSnake = true;
+    headCell.isHead = true;
+    headCell.direction = this.args.directionQueue[0].toString();
+
+    //update the old head cell on the board
+    let prevHeadCell = this.getCellFromBoard(this.snake[1]);
+    prevHeadCell.direction = this.args.directionQueue[0].toString();
+    prevHeadCell.isHead = false;
+  }
+
   coordsAreEqual(a : [number, number], b : [number, number]) : boolean {
     return a.toString() === b.toString();
   }
@@ -155,8 +181,10 @@ export default class GameBoard extends Component {
   resetTheGame() : void {
     this.buildTheGameBoard();
     this.createTheSnake();
-    //this.createTheSnake([[10,10], [10,11], [11,11], [11,12]]);
+    this.args.dequeueAllDirection();
+    this.args.pauseTheGame();
     this.score = 0;
+    this.isMovingSnake = false;
   }
 
 };
