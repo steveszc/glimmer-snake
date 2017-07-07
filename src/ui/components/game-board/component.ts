@@ -77,11 +77,9 @@ export default class GameBoard extends Component {
     let snakeHasLength : boolean = this.snake.length > 1;
 
     // Snake is 2+ cells :
-    // Handle food/tail moving before the head is added
-    if (snakeHasLength) {
-      if (foodCollision) this.eatTheFood();
-      else this.removeTheSnakeTail();
-    }
+    // Handle tail moving before the head is added
+    // tail doesn't move if food is being eaten
+    if (snakeHasLength && !foodCollision) this.removeTheSnakeTail();
 
     // Second, restart the game if collision
     // boundsCollision come first and short circuits in case next head is off board
@@ -93,11 +91,12 @@ export default class GameBoard extends Component {
     this.addTheSnakeHead(headCoords);
 
     // Snake is 1 cell :
-    // Handle food/tail moving after the head is added
-    if (!snakeHasLength) {
-      if (foodCollision) this.eatTheFood();
-      else this.removeTheSnakeTail();
-    }
+    // Handle tail moving after the head is added
+    // tail doesn't move if food is being eaten
+    if (!snakeHasLength && !foodCollision) this.removeTheSnakeTail();
+
+    // Handle eating a piece of food
+    if (foodCollision) this.eatTheFood();
 
     // If there is a direction queue, dequeue to first direction in the queue
     if (this.args.directionQueue.length > 1) this.args.dequeueDirection();
@@ -108,12 +107,13 @@ export default class GameBoard extends Component {
   }
 
   eatTheFood() : void {
+    let newFoodCoords = this.getEmptyCoords();
     // remove the current piece of food
     this.getCellFromBoard(this.board.food).hasFood = false;
 
     // place a new piece of food on the board
-    this.board.food = this.getEmptyCoords();
-    this.getCellFromBoard(this.board.food).hasFood = true;
+    this.board.food = newFoodCoords;
+    this.getCellFromBoard(newFoodCoords).hasFood = true;
 
     // increment the game score
     this.score = this.score + 1;
