@@ -7,7 +7,9 @@ module('Component: snake-app', function(hooks) {
   setupRenderingTest(hooks);
 
   test('it renders', async function(assert) {
-    await this.render(hbs`<snake-app />`);
-    assert.equal(this.containerElement.textContent, 'Welcome to Glimmer!\n');
+    await this.render(hbs`
+      <snake-app />
+    `);
+    assert.ok(this.containerElement.querySelector('div'));
   });
 });
