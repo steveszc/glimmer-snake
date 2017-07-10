@@ -36,6 +36,10 @@ body {
   border-radius: 100%;
 }
 
+.loader--is-loaded {
+  display: none;
+}
+
 .game {
   display: flex;
 }
