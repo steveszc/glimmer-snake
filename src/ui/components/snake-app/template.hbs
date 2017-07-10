@@ -1,5 +1,4 @@
-<div>
-
+<div class="game">
   <game-board
     @tick={{tick}}
     @size={{state.size}}
@@ -12,6 +11,9 @@
     @dequeueAllDirection={{action dequeueAllDirection}}
     @pauseTheGame={{action changeIsPaused true}} />
 
+</div>
+
+<div class="etc">
   <user-input
     @tick={{tick}}
     @directionQueue={{state.directionQueue}}
