@@ -6,6 +6,9 @@
     <title>Snake</title>
     <meta name="description" content="The classic game of snake.">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color">
+
+    <link rel="manifest" href="{{rootURL}}manifest.json">
 
     {{content-for "head"}}
 
@@ -16,13 +19,16 @@
   <body>
     {{content-for "body"}}
 
-    <main id="app"></main>
+    <main id="app">
+      <noscript>Snake requires javascript to play.</noscript>
+      <img class="loader" src="{{rootURL}}tail-spin.svg" alt="loading">
+    </main>
 
     <script src="{{rootURL}}app.js"></script>
 
     <script>
       if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('service-worker.js')
+        navigator.serviceWorker.register('{{rootURL}}service-worker.js')
         .then(function(registration) {
           console.log('Registered:', registration);
         })
