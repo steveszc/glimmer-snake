@@ -1,4 +1,4 @@
-import { setupTest, setupRenderingTest } from '@glimmer/test-helpers';
+import { setupRenderingTest } from '@glimmer/test-helpers';
 import hbs from '@glimmer/inline-precompile';
 
 const { module, test } = QUnit;
