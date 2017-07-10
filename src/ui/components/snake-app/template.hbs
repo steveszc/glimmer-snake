@@ -23,8 +23,7 @@
     @startTheGame={{action changeIsPaused false}}
     @pauseTheGame={{action changeIsPaused true}} />
 
-  <pause-menu
-    @isPaused={{state.isPaused}}
+  <game-settings
     @size={{state.size}}
     @changeSize={{action changeSize}}
     @speed={{state.speed}}
