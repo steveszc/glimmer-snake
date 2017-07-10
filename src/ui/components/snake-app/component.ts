@@ -3,8 +3,8 @@ import Component, { tracked } from "@glimmer/component";
 export default class Snake extends Component {
 
   @tracked state = {
-    size: 20,
-    speed: 100,
+    size: 10,
+    speed: 200,
     directionQueue: [],
     isPaused: true
   }
