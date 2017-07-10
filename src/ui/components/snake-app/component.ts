@@ -11,6 +11,10 @@ export default class Snake extends Component {
 
   @tracked tick : number = 0;
 
+  didInsertElement() {
+    document.querySelector('.loader').style.display = 'none';
+  }
+
   changeSize(size : number) {
     this.state = { ...this.state, size };
   }

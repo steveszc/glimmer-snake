@@ -1,14 +1,19 @@
-<div class="board {{concat 'board--' @size}}">
-  {{#each board.rows key="@index" as |row|}}
-    <div class="row">
-      {{#each row.cells key="@index" as |cell|}}
-        <div class="cell">
-          <div
-            class="{{ternary cell.hasSnake 'snake'}}{{ternary cell.direction (concat ' snake--' cell.direction)}}{{ternary cell.isHead ' snake--head'}}{{ternary cell.hasFood ' food'}}"></div>
-        </div>
-      {{/each}}
-    </div>
-  {{/each}}
+<div class="container">
+  <div class="board {{concat 'board--' @size}}">
+    {{#each board.rows key="@index" as |row|}}
+      <div class="row">
+        {{#each row.cells key="@index" as |cell|}}
+          <div class="cell">
+            <div
+              class="{{ternary cell.hasSnake 'snake'}}{{ternary cell.direction (concat ' snake--' cell.direction)}}{{ternary cell.isHead ' snake--head'}}{{ternary cell.hasFood ' food'}}"></div>
+          </div>
+        {{/each}}
+      </div>
+    {{/each}}
+  </div>
 </div>
-<p><strong>score:</strong> {{score}} </p>
-<p><strong>efficiency:</strong> {{divide @tick score}}</p>
+
+<ul class="score">
+  <li><strong>score:</strong> {{score}} </li>
+  <li><strong>efficiency:</strong> {{divide @tick score}}</li>
+</ul>

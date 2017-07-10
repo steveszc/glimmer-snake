@@ -7,11 +7,63 @@ $orange: #F5835F;
 $gray: #8C9AB1;
 $white: #FFFFFF;
 
+html,
+body,
+#app,
+.game,
+.container {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
 body {
   background-color: $black;
-  font-family: sans-serif;
+  font-family: monospace;
   color: $orange;
-  text-align: center;
+}
+
+.loader {
+  width: 100px;
+  position: absolute;
+  top: calc(50% - 50px);
+  left: calc(50% - 50px);
+  z-index: 2;
+  background-color: $orange;
+  padding: 0em;
+  box-sizing: border-box;
+  border-radius: 100%;
+}
+
+.game {
+  display: flex;
+}
+
+.score {
+  position: absolute;
+  top: 0;
+  padding: 0.5em 1em;
+  list-style: none;
+}
+
+.container {
+  display: inline-flex;
+  align-items: center;
+}
+
+.menu {
+  box-sizing: border-box;
+  position: absolute;
+  bottom: 0;
+  display: flex;
+  width: 100%;
+  padding: 0.5em 1em;
+
+  div:nth-child(2) {
+    flex-grow: 4;
+    text-align: center;
+  }
 }
 
 .board {
@@ -102,6 +154,5 @@ select {
   background: $black;
   color: $orange;
   border: none;
-  font-size: 1em;
   margin: .25em;
 }

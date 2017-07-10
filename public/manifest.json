@@ -1,0 +1,30 @@
+{
+  "short_name": "Snake",
+  "name": "Glimmer Snake",
+  "background_color": "#1E293B",
+  "theme_color": "#1E293B",
+  "display": "standalone",
+  "icons": [
+    {
+      "src": "icon-48.png",
+      "type": "image/png",
+      "sizes": "48x48"
+    },
+    {
+      "src": "icon-96.png",
+      "type": "image/png",
+      "sizes": "96x96"
+    },
+    {
+      "src": "icon-192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "icon-512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": "index.html?_=app"
+}
