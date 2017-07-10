@@ -24,7 +24,8 @@ export default class GameBoard extends Component {
   constructor(options) {
     super(options);
     this.size = this.args.size;
-    this.resetTheGame();
+    this.buildTheGameBoard();
+    this.createTheSnake();
   }
 
   didUpdate() {
@@ -47,11 +48,10 @@ export default class GameBoard extends Component {
     this.getCellFromBoard(this.board.food).hasFood = true;
   }
 
-  createTheSnake(body : Array<[number, number]> = [this.getRandomCoords()]) {
-    let cells = body.map(cell => this.getCellFromBoard(cell));
-    this.snake = body;
+  createTheSnake(seed : Array<[number, number]> = [this.getRandomCoords()]) {
+    let cells = seed.map(cell => this.getCellFromBoard(cell));
+    this.snake = seed;
     cells.forEach(cell => cell.hasSnake = true);
-    this.args.resetTick();
   }
 
   moveTheSnake() : any {
@@ -181,6 +181,7 @@ export default class GameBoard extends Component {
   resetTheGame() : void {
     this.buildTheGameBoard();
     this.createTheSnake();
+    this.args.resetTick();
     this.args.dequeueAllDirection();
     this.args.pauseTheGame();
     this.score = 0;

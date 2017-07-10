@@ -4,7 +4,7 @@
       {{#each row.cells key="@index" as |cell|}}
         <div class="cell">
           <div
-            class="{{if cell.hasSnake 'snake'}}{{if cell.direction (concat ' snake--' cell.direction)}}{{if cell.isHead ' snake--head'}}{{if cell.hasFood ' food'}}"></div>
+            class="{{ternary cell.hasSnake 'snake'}}{{ternary cell.direction (concat ' snake--' cell.direction)}}{{ternary cell.isHead ' snake--head'}}{{ternary cell.hasFood ' food'}}"></div>
         </div>
       {{/each}}
     </div>

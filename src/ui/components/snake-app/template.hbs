@@ -2,14 +2,14 @@
 
   <game-board
     @tick={{tick}}
-    @incrementTick={{action incrementTick}}
-    @resetTick={{action resetTick}}
     @size={{state.size}}
-    @directionQueue={{state.directionQueue}}
-    @dequeueDirection={{action dequeueDirection}}
-    @dequeueAllDirection={{action dequeueAllDirection}}
     @speed={{state.speed}}
     @isPaused={{state.isPaused}}
+    @directionQueue={{state.directionQueue}}
+    @incrementTick={{action incrementTick}}
+    @resetTick={{action resetTick}}
+    @dequeueDirection={{action dequeueDirection}}
+    @dequeueAllDirection={{action dequeueAllDirection}}
     @pauseTheGame={{action changeIsPaused true}} />
 
   <user-input
