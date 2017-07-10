@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Snake</title>
+    <meta name="description" content="The classic game of snake.">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#1E293B">
+
+    <link rel="manifest" href="manifest.json">
+
+    
+
+    <link rel="stylesheet" href="app-d41eba00325747346b349e0e6c60e85b.css">
+
+    
+  </head>
+  <body>
+    
+
+    <main id="app">
+      <noscript>Snake requires javascript to play.</noscript>
+      <img class="loader" src="tail-spin.svg" alt="loading">
+    </main>
+
+    <script src="app-eec8ee180709c24df2bb72a099bdd68c.js"></script>
+
+    <script>
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('service-worker-205bc6891b278a1bdc4b2f11742748d3.js')
+        .then(function(registration) {
+          console.log('Registered:', registration);
+        })
+        .catch(function(error) {
+          console.log('Registration failed: ', error);
+        });
+      }
+    </script>
+
+    
+  </body>
+</html>
