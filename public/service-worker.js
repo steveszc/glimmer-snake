@@ -1,4 +1,5 @@
-var CACHE_NAME = 'snake-static-cache';
+var CACHE_VERSION = '2';
+var CACHE_NAME = 'snake-static-cache-v' + CACHE_VERSION;
 var urlsToCache = [
   '.',
   'index.html'
