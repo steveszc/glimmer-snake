@@ -77,11 +77,10 @@ body {
   flex-direction: column;
 }
 
+.board--6 { font-size: 3em; }
 .board--10 { font-size: 2em; }
 .board--20 { font-size: 1em; }
 .board--30 { font-size: 0.5em; }
-.board--40 { font-size: 0.125em; }
-.board--50 { font-size: 0.125em; }
 
 .row {
   height: $size__cell;

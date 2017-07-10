@@ -3,7 +3,7 @@ import hbs from '@glimmer/inline-precompile';
 
 const { module, test } = QUnit;
 
-module('Component: pause-menu', function(hooks) {
+module('Component: game-settings', function(hooks) {
   // setupRenderingTest(hooks);
 
   // test('it renders', async function(assert) {
